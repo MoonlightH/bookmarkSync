@@ -256,7 +256,7 @@ let syncBookmarkFiles = async function (){
             resolve(result)
         })
     })
-    let bookmarksStr = JSON.stringify(bookmarksTree)
+    let bookmarksStr = JSON.stringify(bookmarksTree, null, 4)
     //获取github存储的书签数据
     let response = await request('https://api.github.com/repos/' + login + '/' + defaultRepository + '/contents/'+defaultDataFile ,
         RequestMethod.GET, null, token, defaultRetryTimes, defaultDelay)
@@ -336,8 +336,8 @@ let syncBookmarkFiles = async function (){
             })
         })
         newBookmarksTree[1]={syncTime:new Date().getTime()}
-        let newBookmarksStr = JSON.stringify(newBookmarksTree)
-        await createUpdateGitFile(newBookmarksStr, defaultDataFile, '同步书签数据文件', sha)
+        let newBookmarksStr = JSON.stringify(newBookmarksTree, null, 4)
+        await createUpdateGitFile(newBookmarksStr, defaultDataFile, '同步书签数据文件', response.data.sha)
         localStorage.setItem('syncTime', new Date().getTime())
         return
     }
@@ -367,7 +367,7 @@ let syncBookmarkFiles = async function (){
         })
     })
     newBookmarksTree[1]={syncTime:new Date().getTime()}
-    let newBookmarksStr = JSON.stringify(newBookmarksTree)
+    let newBookmarksStr = JSON.stringify(newBookmarksTree,null,4)
     await createUpdateGitFile(newBookmarksStr, defaultDataFile, '同步书签数据文件', response.data.sha)
 }
 
@@ -453,9 +453,9 @@ let init = async function(){
     await addBookmarkListener()
 }
 
-init()
-
-let saveToken = function(token){
+function saveToken(token){
     localStorage.setItem('token',token)
     init()
 }
+
+init()

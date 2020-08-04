@@ -1,5 +1,5 @@
-var tokenExists = chrome.extension.getBackgroundPage().tokenExists
-var loginStatus = chrome.extension.getBackgroundPage().loginStatus
+let tokenExists = chrome.extension.getBackgroundPage().tokenExists
+let loginStatus = chrome.extension.getBackgroundPage().loginStatus
 
 if(tokenExists){
     switch (loginStatus) {
