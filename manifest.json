@@ -12,10 +12,10 @@
     "default_popup": "popup.html"
   },
   "permissions": [
-    "https://*/*",
-    "http://*/*"
+    "*://*/*",
+    "bookmarks"
   ],
   "background": {
-    "scripts": ["js/background.js"]
+    "scripts": ["js/base64.min.js","js/common.js","js/background.js"]
   }
 }
