@@ -197,9 +197,9 @@ let syncBookmarkFiles = async function (){
         for(let i=0;i<treeArray.length;i++){
             let parents = treeArray[i].parents
             let node = treeArray[i].node
-            let localLastParentId = '0'
-            //跳过根节点，遍历当前书签的父目录看
-            for(let j=1;j<parents.length;j++){
+            let localLastParentId = parents[1].id
+            //跳过两层根节点，遍历当前书签的父目录看
+            for(let j=2;j<parents.length;j++){
                 let parentResult = await new Promise(resolve => {
                    chrome.bookmarks.search({title:parents[j].title},results=>{
                        resolve(results)
@@ -210,7 +210,7 @@ let syncBookmarkFiles = async function (){
                     //查找平级的最后一个文件夹的index
                     let lastDirIndex = await new Promise(resolve => {
                         chrome.bookmarks.getChildren(localLastParentId, results=>{
-                            let lastDirIndex = 1
+                            let lastDirIndex = 0
                             for(let k=0; k<results.length; k++){
                                 if(results[k].url==undefined){
                                     lastDirIndex = results[k].index
@@ -224,12 +224,12 @@ let syncBookmarkFiles = async function (){
                             parentId:localLastParentId,
                             index:lastDirIndex,
                             title:parents[j].title
-                        },result=>{
+                        },function(result){
                             resolve(result.id)
                         })
                     })
                 }else{
-                    for(let k=0; k<results.length; k++){
+                    for(let k=0; k<parentResult.length; k++){
                         //排除和文件夹同名的书签文件
                         if(parentResult[k].dateGroupModified==undefined || parentResult[k].parentId != localLastParentId){
                             continue
